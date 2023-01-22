@@ -5,11 +5,17 @@ import argparse
 import os
 import cv2
 
+# ignore warnings
+import warnings
+warnings.filterwarnings("ignore")
+
 # to log the results using current date and time
 from datetime import datetime
 
 # progress bar
 from tqdm import tqdm
+
+PATTRN_WEIGHTS = 'https://github.com/MeshalAlamr/smartathon-theme-1/raw/main/models/pattrn/weights/best.pt'
 
 def prepare_results(model_name, n_segments):
     print("Resizing images to 960x540 and saving them to resized_dataset/images if they do not exist...")
@@ -32,6 +38,11 @@ def prepare_results(model_name, n_segments):
     # realase the GPU memory
     torch.cuda.empty_cache()
 
+    # if the pattrn model weights do not exist, or if they are corrupted, download them
+    if not os.path.exists(f'models/pattrn/weights/best.pt') or os.stat('models/pattrn/weights/best.pt').st_size < 1E8:
+        print("Downloading model weights...")
+        torch.hub.download_url_to_file(PATTRN_WEIGHTS, 'models/pattrn/weights/best.pt', progress=True)
+            
     # Load Model
     model = torch.hub.load('ultralytics/yolov5', 'custom', path=f'models/{model_name}/weights/best.pt')  # local model
 
@@ -57,11 +68,6 @@ def prepare_results(model_name, n_segments):
         else:
             img = df_test['image_path'].tolist()[divide*n :]
             df_test_t = df_test[divide*n:]
-
-        # # load images
-        # imgs = [cv2.imread(x) for x in img]
-        # # resize images to 960x540
-        # imgs = [cv2.resize(x, (960, 540)) for x in imgs]
 
         # inference
         results = model(img)

@@ -38,6 +38,7 @@ git clone https://github.com/MeshalAlamr/smartathon-theme-1.git
 
 3. Install the project requirements:
 ```
+cd smartathon-theme-1
 pip install -r requirements.txt
 ```
 
@@ -46,6 +47,8 @@ pip install -r requirements.txt
 python inference.py --model_name pattrn --segments 8
 ```
 This will generate the output csv file containing the labels and bounding boxes for the visual pollutions in the ``results`` folder.
+
+<b>Note</b>: In case you faced memory issues during inference, try to increase the ``segments`` parameter.
 
 
 ## Model Weights <a name="model" />
