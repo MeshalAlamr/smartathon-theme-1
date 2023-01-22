@@ -4,7 +4,8 @@ import torch
 import argparse 
 import os
 import cv2
-
+import warnings
+warnings.filterwarnings("ignore")
 # to log the results using current date and time
 from datetime import datetime
 
@@ -57,11 +58,6 @@ def prepare_results(model_name, n_segments):
         else:
             img = df_test['image_path'].tolist()[divide*n :]
             df_test_t = df_test[divide*n:]
-
-        # # load images
-        # imgs = [cv2.imread(x) for x in img]
-        # # resize images to 960x540
-        # imgs = [cv2.resize(x, (960, 540)) for x in imgs]
 
         # inference
         results = model(img)
