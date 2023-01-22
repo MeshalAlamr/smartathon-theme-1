@@ -10,6 +10,9 @@ __pycache__/
 dataset/*
 resized_dataset/*
 
+# ignore results files
+results/*
+
 # Distribution / packaging
 .Python
 build/
